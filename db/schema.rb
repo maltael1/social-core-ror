@@ -10,21 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_30_192350) do
+ActiveRecord::Schema.define(version: 2018_12_23_184107) do
 
-  create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.boolean "is_active"
-    t.string "name"
-    t.string "code"
+  create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.boolean "active", default: true
+    t.string "token"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.boolean "is_admin"
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.boolean "is_admin", default: false
     t.string "email"
     t.string "password"
-    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

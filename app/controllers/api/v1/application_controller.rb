@@ -5,8 +5,12 @@ class Api::V1::ApplicationController < ActionController::API
     private
 
     def authenticate
-        authenticate_with_http_token do |token, options|
-          @user = User.find_by(token: token)
-        end
-        render json: {error: 'Application not ready'}, status: 405 if (@user.nil? || !@user.is_admin) && Feature.not('app_is_ready')   end
+      authenticate_or_request_with_http_token do |token, options|
+        @session = Session.find_by(token: Digest::MD5.hexdigest(token))
+        render json: {error: 'Invalid token'}, status: :forbidden if @session.nil?
+        render json: {error: 'Token lifetime expired '}, status: :forbidden unless @session.active?
+        @user = @session.user
+        @session.save!
+      end
+    end
 end
